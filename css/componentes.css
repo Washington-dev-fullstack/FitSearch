@@ -1,0 +1,187 @@
+/* =========================================================
+   COMPONENTES: busca, chips, segmento, cartão, etiqueta, gaveta
+   ========================================================= */
+
+/* ---------- forma de etiqueta com entalhe (sem cortar o foco) ---------- */
+.rotulo-entalhe { position: relative; isolation: isolate; }
+.rotulo-entalhe::before,
+.rotulo-entalhe::after { content: ''; position: absolute; z-index: -1; clip-path: var(--entalhe); pointer-events: none; }
+.rotulo-entalhe::before { inset: 0; background: var(--fundo, var(--etiqueta)); }
+.rotulo-entalhe::after { inset: 4px; border: 1.5px dashed var(--ponto-rotulo, var(--ponto)); border-right: 0; opacity: 0.9; }
+
+/* ---------- busca ---------- */
+.busca { position: relative; max-width: 560px; }
+.busca-caixa {
+    display: flex; align-items: center; gap: 0.6rem;
+    height: 60px; padding: 0 6px 0 1.1rem;
+    background: var(--campo); border: 1.5px solid var(--tinta); border-radius: 6px;
+}
+.busca-caixa:focus-within { box-shadow: 0 0 0 3px var(--algodao), 0 0 0 5px var(--tinta); }
+.busca-lupa { flex: none; color: var(--tinta-suave); }
+.busca-campo {
+    flex: 1; min-width: 0; height: 100%;
+    border: 0; background: transparent; outline: none;
+    font: inherit; font-size: 1.02rem; color: var(--tinta);
+}
+.busca-campo::placeholder { color: var(--tinta-apagada); }
+.busca-campo::-webkit-search-cancel-button { display: none; }
+.busca-atalho {
+    flex: none; font-size: 0.72rem; color: var(--tinta-apagada);
+    border: 1.5px solid var(--linha-forte); border-radius: 4px; padding: 0.1em 0.5em;
+}
+.busca-botao {
+    flex: none; height: 46px; padding: 0 1.3rem; border-radius: 4px;
+    background: var(--tinta); color: var(--neon);
+    font-family: var(--fonte-mono); font-size: 0.76rem; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.busca-botao:hover { background: #2a2a2a; }
+.busca-lista {
+    position: absolute; z-index: 40; left: 0; right: 0; top: calc(100% + 8px);
+    background: var(--campo); border: 1.5px solid var(--tinta); border-radius: 6px;
+    padding: 6px 0; box-shadow: var(--sombra-alta);
+}
+.busca-opcao {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+    padding: 0.7rem 1.1rem; cursor: pointer; font-size: 0.98rem;
+}
+.busca-opcao-tipo { flex: none; font-family: var(--fonte-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tinta-apagada); }
+.busca-opcao[aria-selected="true"], .busca-opcao:hover { background: var(--tinta); color: var(--creme); }
+.busca-opcao[aria-selected="true"] .busca-opcao-tipo, .busca-opcao:hover .busca-opcao-tipo { color: var(--neon); }
+
+/* ---------- chips de estilo (etiquetas tecidas) ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.chip {
+    --fundo: var(--etiqueta);
+    min-height: 44px; padding: 0.7em 2em 0.7em 1.05em;
+    font-family: var(--fonte-mono); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+    transition: transform 0.2s var(--saida);
+}
+.chip:hover { transform: translateY(-2px); }
+.chip[aria-pressed="true"] { --fundo: var(--tinta); --ponto-rotulo: var(--ponto-claro); color: var(--neon); }
+
+/* ---------- segmento (para quem) ---------- */
+.segmento { display: inline-flex; gap: 4px; }
+.segmento button {
+    min-height: 44px; padding: 0.6em 1em;
+    font-family: var(--fonte-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1.5px solid var(--tinta); border-radius: var(--raio-p);
+}
+.segmento button[aria-pressed="true"] { background: var(--tinta); color: var(--neon); }
+.segmento button:hover:not([aria-pressed="true"]) { background: var(--etiqueta); }
+
+/* ---------- pílulas (ocasião) ---------- */
+.pilula {
+    min-height: 40px; padding: 0.4em 1em; border-radius: 99px;
+    border: 1.5px solid var(--linha-forte); font-size: 0.92rem;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.pilula:hover { border-color: var(--tinta); }
+.pilula[aria-pressed="true"] { background: var(--tinta); color: var(--creme); border-color: var(--tinta); }
+
+/* ---------- cartão de look ---------- */
+.cartao-botao { display: block; width: 100%; text-align: left; }
+.cartao-foto {
+    position: relative; aspect-ratio: 3 / 4; border-radius: 6px; overflow: hidden;
+    background: var(--linho);
+    transition: transform 0.35s var(--saida), box-shadow 0.35s var(--saida);
+}
+.cartao-foto img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--saida); }
+.cartao-botao:hover .cartao-foto { transform: translateY(-5px); box-shadow: var(--sombra-alta); }
+.cartao-botao:hover .cartao-foto img { transform: scale(1.04); }
+.cartao-tag {
+    --fundo: var(--etiqueta);
+    position: absolute; z-index: 2; top: 12px; left: 10px;
+    padding: 0.45em 1.7em 0.45em 0.8em;
+    font-family: var(--fonte-mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase;
+    transform: rotate(-3deg); transform-origin: 0 0;
+}
+.cartao-botao:hover .cartao-tag { animation: balanca-tag 0.9s var(--saida); }
+@keyframes balanca-tag { 0% { transform: rotate(-3deg); } 30% { transform: rotate(-9deg); } 60% { transform: rotate(0deg); } 100% { transform: rotate(-3deg); } }
+.cartao-pct {
+    position: absolute; z-index: 2; right: 10px; bottom: 10px;
+    background: var(--neon); color: var(--tinta); border-radius: 3px;
+    padding: 0.35em 0.6em; font-family: var(--fonte-mono); font-size: 0.7rem; letter-spacing: 0.04em;
+}
+.cartao-nome { margin-top: 0.85rem; font-size: 1.12rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+.cartao-pecas {
+    margin-top: 0.3rem; font-family: var(--fonte-mono); font-size: 0.68rem;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-apagada);
+}
+
+/* ---------- etiqueta de composição ---------- */
+.etiqueta {
+    background: var(--tinta); color: var(--creme);
+    border-radius: var(--raio-p); padding: 1.15rem 1.25rem 1rem;
+    outline: 1.5px dashed var(--ponto-claro); outline-offset: -7px;
+    box-shadow: var(--sombra-etiqueta);
+    font-family: var(--fonte-mono); font-size: 0.74rem;
+}
+.etiqueta-titulo { display: block; color: var(--neon); font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 0.65rem; }
+.etiqueta-linha { display: grid; grid-template-columns: 1fr auto; gap: 0.8rem; align-items: center; padding: 0.2rem 0; text-transform: uppercase; letter-spacing: 0.06em; }
+.etiqueta.com-barras .etiqueta-linha { grid-template-columns: minmax(6.5em, auto) 1fr 3.2em; }
+.etiqueta-barra { height: 6px; border-radius: 99px; background: rgba(237, 233, 224, 0.16); overflow: hidden; }
+.etiqueta-barra i { display: block; height: 100%; border-radius: 99px; background: var(--neon); transition: width 0.6s var(--saida); }
+.etiqueta-pct { text-align: right; font-variant-numeric: tabular-nums; }
+.etiqueta-vazia { color: rgba(237, 233, 224, 0.72); line-height: 1.5; }
+.etiqueta-piada { display: block; margin-top: 0.75rem; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237, 233, 224, 0.66); line-height: 1.5; }
+.etiqueta-acoes { display: flex; flex-wrap: wrap; gap: 0.2rem 1rem; margin-top: 0.4rem; }
+.etiqueta-acao {
+    min-height: 36px; font-family: var(--fonte-mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--neon); text-decoration: underline; text-underline-offset: 0.3em;
+}
+.etiqueta-acao + .etiqueta-acao { color: rgba(237, 233, 224, 0.75); }
+.etiqueta :focus-visible { outline-color: var(--neon); }
+
+/* ---------- vazio ---------- */
+.vazio { margin-top: 32px; padding: clamp(32px, 6vw, 64px); text-align: center; background: var(--etiqueta); border-radius: 6px; outline: 1.5px dashed var(--ponto); outline-offset: -8px; }
+.vazio-cabide {
+    display: inline-grid; place-items: center; width: 64px; height: 46px;
+    background: var(--tinta); color: var(--neon); font-family: var(--fonte-titulo); font-weight: 800; font-size: 1.6rem;
+    clip-path: polygon(0 0, 100% 0, 86% 50%, 100% 100%, 0 100%);
+}
+.vazio-titulo { margin-top: 1rem; font-size: clamp(1.5rem, 1rem + 2vw, 2.2rem); }
+.vazio-piada { margin-top: 0.5rem; font-family: var(--fonte-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-apagada); }
+.vazio-sugestoes { margin-top: 1.4rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+/* ---------- gaveta ---------- */
+.gaveta {
+    position: fixed; inset: 0 0 0 auto; margin: 0;
+    width: min(580px, 100%); height: 100%; max-width: 100%; max-height: 100%;
+    padding: 0; border: 0; background: var(--etiqueta); color: var(--tinta);
+    overflow: hidden auto; overscroll-behavior: contain;
+}
+.gaveta::backdrop { background: rgba(20, 20, 20, 0.5); }
+.gaveta-painel { position: relative; min-height: 100%; }
+.gaveta-trilho { position: sticky; top: 0; z-index: 5; height: 0; display: flex; justify-content: flex-end; }
+.gaveta-fechar { margin: 14px 14px 0 0; height: 40px; min-height: 40px; padding: 0.6em 1em; background: var(--etiqueta); }
+.gaveta-foto { aspect-ratio: 4 / 5; max-height: 62vh; width: 100%; overflow: hidden; background: var(--linho); }
+.gaveta-foto img { width: 100%; height: 100%; object-fit: cover; }
+.gaveta-corpo { padding: 1.6rem clamp(20px, 4vw, 36px) 2.4rem; }
+.gaveta-chip { --fundo: var(--tinta); --ponto-rotulo: var(--ponto-claro); display: inline-block; color: var(--neon); padding: 0.45em 1.8em 0.45em 0.85em; font-family: var(--fonte-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.gaveta-nome { margin-top: 0.8rem; font-size: clamp(1.7rem, 1.2rem + 1.6vw, 2.3rem); }
+.gaveta-meta { margin-top: 0.6rem; font-family: var(--fonte-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tinta-apagada); }
+.gaveta-rotulo { margin-top: 1.8rem; font-family: var(--fonte-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tinta-apagada); }
+.gaveta-motivos { margin-top: 0.5rem; display: grid; gap: 0.4rem; }
+.gaveta-motivos li { padding-left: 1.2rem; position: relative; line-height: 1.45; }
+.gaveta-motivos li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 0.55rem; height: 0.4rem; background: var(--tinta); clip-path: polygon(0 0, 100% 0, 75% 50%, 100% 100%, 0 100%); }
+.gaveta-pecas { margin-top: 0.4rem; }
+.gaveta-peca { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 0.3rem 0.8rem; align-items: center; padding: 0.8rem 0; border-bottom: 1.5px dashed var(--linha-forte); }
+.gaveta-peca-cor { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--linha-forte); }
+.gaveta-peca-nome { font-weight: 500; }
+.gaveta-peca-preco { font-family: var(--fonte-mono); font-size: 0.74rem; color: var(--tinta-apagada); font-variant-numeric: tabular-nums; }
+.gaveta-peca-link { grid-column: 2 / -1; justify-self: start; font-family: var(--fonte-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; text-underline-offset: 0.3em; min-height: 32px; display: inline-flex; align-items: center; }
+.gaveta-peca-link:hover { text-decoration-style: dashed; }
+.gaveta-nota { margin-top: 0.8rem; font-size: 0.82rem; color: var(--tinta-apagada); }
+.gaveta-parecidos { margin-top: 0.7rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.gaveta-parecido { text-align: left; }
+.gaveta-parecido-foto { aspect-ratio: 3 / 4; border-radius: 4px; overflow: hidden; background: var(--linho); }
+.gaveta-parecido-foto img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--saida); }
+.gaveta-parecido:hover img { transform: scale(1.05); }
+.gaveta-parecido span { display: block; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.25; }
+
+@media (max-width: 767px) {
+    .pilula, .gaveta-peca-link, .etiqueta-acao, .link-discreto { min-height: 44px; }
+    .gaveta { inset: auto 0 0 0; width: 100%; height: 90dvh; max-height: 90dvh; border-radius: 16px 16px 0 0; }
+    .gaveta-foto { aspect-ratio: 1 / 1; max-height: 46vh; }
+    .gaveta-parecidos { grid-template-columns: repeat(2, 1fr); }
+}

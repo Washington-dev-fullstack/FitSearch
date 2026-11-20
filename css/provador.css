@@ -1,0 +1,159 @@
+/* =========================================================
+   PROVADOR: "fica ou não fica" em tela cheia
+   --flood e --flood-tinta mudam a cada look (cor do estilo)
+   ========================================================= */
+.provador {
+    --flood: var(--neon); --flood-tinta: var(--tinta);
+    position: fixed; inset: 0; width: 100%; height: 100%; max-width: 100%; max-height: 100%;
+    margin: 0; padding: 0; border: 0; overflow: hidden;
+    background: var(--flood); color: var(--flood-tinta);
+    transition: background-color 0.6s var(--saida), color 0.6s var(--saida);
+}
+.provador[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.provador::backdrop { background: var(--tinta); }
+.provador :focus-visible { outline-color: var(--flood-tinta); }
+.provador-passo[hidden], .provador-progresso[hidden] { display: none !important; }
+
+.provador-cortina { position: absolute; inset: 0; z-index: 30; display: flex; pointer-events: none; }
+.provador-cortina i { flex: 1; transform: scaleY(0); transform-origin: 50% 0; }
+
+.provador-topo { position: relative; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px var(--margem); }
+.provador-progresso { display: flex; align-items: center; gap: 12px; font-family: var(--fonte-mono); font-size: 0.76rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.provador-pontos { display: flex; gap: 4px; }
+.provador-pontos i { width: 16px; height: 5px; border-radius: 99px; background: currentColor; opacity: 0.22; transition: opacity 0.3s; }
+.provador-pontos i.f { opacity: 1; }
+.provador-sair { min-height: 40px; padding: 0.55em 1em; }
+
+.provador-passo { position: relative; min-height: 0; }
+
+/* ---------- passo: para quem / nada ficou ---------- */
+.passo-para, .passo-vazio { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; text-align: center; padding: 0 var(--margem) 10vh; }
+.provador-pergunta { font-size: clamp(2.2rem, 1.2rem + 4vw, 4.4rem); max-width: 15ch; }
+.provador-texto { max-width: 46ch; font-size: 1.06rem; }
+.provador-opcoes { margin-top: 1.4rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.opcao-para {
+    --fundo: var(--tinta); --ponto-rotulo: var(--ponto-claro); color: var(--neon);
+    min-height: 66px; padding: 0.7em 2.4em 0.7em 1.3em;
+    font-family: var(--fonte-titulo); font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em;
+    transition: transform 0.3s var(--mola);
+}
+.opcao-para:hover { transform: translateY(-4px) rotate(-1.5deg); }
+
+/* ---------- passo: looks ----------
+   Grade de 3 colunas: NÃO | carta | FICA e, embaixo, desfazer | botões | etiqueta.
+   Cada peça tem a sua área: nada se sobrepõe, em tela nenhuma. */
+.passo-looks {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 380px) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas: "nao palco fica" "aux botoes etq";
+    column-gap: clamp(20px, 3vw, 56px);
+    row-gap: clamp(12px, 2.4vh, 24px);
+    padding: 4px var(--margem) clamp(14px, 3.5vh, 36px);
+}
+.lado { container-type: inline-size; min-width: 0; display: flex; align-items: center; }
+.lado-nao { grid-area: nao; justify-content: flex-end; }
+.lado-fica { grid-area: fica; justify-content: flex-start; }
+.gigante {
+    display: block;
+    font-family: var(--fonte-titulo); font-weight: 800;
+    font-size: min(25cqi, 24vh, 11rem); /* "FICA" mede 3,76em: com 25cqi cabe sempre na própria coluna */
+    letter-spacing: -0.05em; line-height: 0.8; white-space: nowrap; color: transparent;
+    -webkit-text-stroke: 2px var(--flood-tinta); pointer-events: none; user-select: none;
+}
+.palco { grid-area: palco; min-height: 0; height: 100%; container-type: size; display: grid; place-items: center; }
+.pilha { position: relative; height: min(100cqh, 150cqw, 600px); aspect-ratio: 2 / 3; }
+.carta {
+    position: absolute; inset: 0 0 26px; border-radius: 14px; overflow: hidden; background: var(--linho);
+    box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.38);
+    touch-action: none; cursor: grab; transform-origin: 50% 90%; will-change: transform; user-select: none;
+}
+.carta:active { cursor: grabbing; }
+.carta img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
+
+.provador-botoes { grid-area: botoes; justify-self: center; align-self: center; display: flex; gap: 10px; }
+.provador-botoes .botao-tinta { background: var(--flood-tinta); color: var(--flood); border-color: var(--flood-tinta); }
+.provador-botoes .botao-contorno { border-color: var(--flood-tinta); color: var(--flood-tinta); }
+.provador-botoes .botao:hover:not(:disabled) { box-shadow: 0 6px 0 -2px var(--flood-tinta); }
+.provador-aux { grid-area: aux; justify-self: start; align-self: center; display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
+.provador-teclas { font-family: var(--fonte-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.8; }
+.provador-etiqueta { grid-area: etq; justify-self: end; align-self: end; width: min(250px, 100%); transform: rotate(-2deg); }
+
+/* celular deitado e telas muito baixas: a carta precisa de toda a altura */
+@media (max-height: 500px) and (min-width: 760px) {
+    .passo-looks { grid-template-areas: "nao palco fica" "aux botoes ."; row-gap: 8px; padding-bottom: 10px; }
+    .provador-etiqueta, .provador-teclas { display: none; }
+    .provador-topo { padding-block: 8px; }
+    .provador-botoes .botao { min-height: 44px; padding-block: 0.6em; }
+}
+
+/* telas baixas (notebook com a barra do navegador): etiqueta mais compacta */
+@media (max-height: 680px) and (min-width: 760px) {
+    .provador-etiqueta .etiqueta { padding: 0.85rem 1rem 0.75rem; }
+    .provador-etiqueta .etiqueta-piada { display: none; }
+    .provador-topo { padding-block: 12px; }
+}
+
+/* ---------- passo: resultado ---------- */
+.passo-fim { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(28px, 5vw, 80px); padding: 0 var(--margem) 6vh; max-width: var(--largura); width: 100%; margin: 0 auto; }
+.fim-titulo { margin-top: 1rem; font-size: min(clamp(2.4rem, 1.2rem + 4.4vw, 5rem), 12vh); line-height: 0.95; letter-spacing: -0.045em; }
+.fim-frase { margin-top: 1.2rem; font-size: 1.2rem; max-width: 34ch; }
+.fim-acoes { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 10px; }
+.fim-etiqueta { position: relative; justify-self: center; width: min(460px, 100%); transform: rotate(-4deg); }
+.fim-etiqueta .etiqueta { position: relative; font-size: 0.95rem; padding: 2.1rem 2.1rem 1.7rem; outline: none; }
+.fim-etiqueta .etiqueta-titulo { font-size: 0.9rem; margin-bottom: 1.1rem; }
+.fim-etiqueta .etiqueta-linha { padding: 0.45rem 0; }
+.fim-etiqueta .etiqueta-barra { height: 9px; }
+.fim-etiqueta .etiqueta-piada { font-size: 0.72rem; margin-top: 1.2rem; }
+.costura-svg { position: absolute; inset: 9px; width: calc(100% - 18px); height: calc(100% - 18px); pointer-events: none; overflow: visible; }
+.costura-svg rect { fill: none; stroke: var(--ponto-claro); stroke-width: 1.5; stroke-dasharray: 6 5; }
+
+/* ---------- celular ---------- */
+/* celular e tablet em pé: NÃO e FICA viram a régua do arraste, acima da carta (esquerda = não, direita = fica) */
+@media (max-width: 759px), (orientation: portrait) and (max-width: 1100px) {
+    .passo-looks {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr) auto auto;
+        grid-template-areas: "nao fica" "palco palco" "botoes botoes" "aux aux";
+        column-gap: 16px; row-gap: 10px;
+    }
+    .lado-nao { justify-content: flex-start; }
+    .lado-fica { justify-content: flex-end; }
+    .gigante { font-size: min(25cqi, 8vh, 4.5rem); -webkit-text-stroke-width: 1.5px; }
+    .provador-aux { justify-self: center; align-items: center; }
+    .provador-etiqueta { display: none; }
+    .provador-teclas { display: none; }
+}
+@media (max-width: 767px), (max-height: 560px) {
+    .provador-progresso .provador-pontos { display: none; }
+    .opcao-para { font-size: 1.25rem; min-height: 58px; }
+}
+@media (max-width: 767px) {
+    .passo-fim { grid-template-columns: 1fr; align-content: center; gap: 18px; overflow-y: auto; padding-top: 4px; padding-bottom: 20px; }
+    .fim-etiqueta { order: -1; width: min(300px, 92%); transform: rotate(-3deg); }
+    .fim-etiqueta .etiqueta { font-size: 0.76rem; padding: 1.2rem 1.3rem 1rem; }
+    .fim-etiqueta .etiqueta-titulo { margin-bottom: 0.6rem; }
+    .fim-etiqueta .etiqueta-linha { padding: 0.25rem 0; }
+    .fim-etiqueta .etiqueta-piada { margin-top: 0.6rem; }
+    .fim-texto .selo { display: none; }
+    .fim-titulo { margin-top: 0; font-size: 2.1rem; }
+    .fim-frase { margin-top: 0.6rem; font-size: 1rem; }
+    .fim-acoes { margin-top: 1rem; }
+    .fim-acoes .botao { flex: 1 1 auto; }
+}
+@media (hover: none) { .provador-teclas { display: none; } }
+
+/* resultado em telas baixas (celular deitado): tudo cabe sem rolar */
+@media (max-height: 520px) and (min-width: 768px) {
+    .passo-fim { padding-bottom: 12px; gap: 32px; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
+    .fim-titulo { font-size: min(2.3rem, 11vh); }
+    .fim-acoes .botao { min-height: 44px; padding-block: 0.6em; }
+    .fim-texto .selo { display: none; }
+    .fim-titulo { margin-top: 0; }
+    .fim-frase { margin-top: 0.5rem; font-size: 0.98rem; }
+    .fim-acoes { margin-top: 0.9rem; }
+    .fim-etiqueta .etiqueta { font-size: 0.74rem; padding: 1.1rem 1.2rem 0.9rem; }
+    .fim-etiqueta .etiqueta-titulo { margin-bottom: 0.5rem; }
+    .fim-etiqueta .etiqueta-linha { padding: 0.2rem 0; }
+    .fim-etiqueta .etiqueta-piada { margin-top: 0.5rem; }
+}

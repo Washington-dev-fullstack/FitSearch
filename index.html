@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitSearch · Experimente estilos até achar o seu</title>
+    <meta name="description" content="Busque looks por peça, estilo ou ocasião, ou entre no provador: diga o que fica e descubra a composição do seu estilo.">
+    <meta name="theme-color" content="#E9E5DC">
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Syne:wght@600..800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/componentes.css">
+    <link rel="stylesheet" href="css/secoes.css">
+    <link rel="stylesheet" href="css/provador.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/Flip.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+
+    <script src="js/dados.js" defer></script>
+    <script src="js/motor.js" defer></script>
+    <script src="js/armazenamento.js" defer></script>
+    <script src="js/ui/util.js" defer></script>
+    <script src="js/ui/movimento.js" defer></script>
+    <script src="js/ui/etiqueta.js" defer></script>
+    <script src="js/ui/cortina.js" defer></script>
+    <script src="js/ui/busca.js" defer></script>
+    <script src="js/ui/arara.js" defer></script>
+    <script src="js/ui/faixa.js" defer></script>
+    <script src="js/ui/estilos.js" defer></script>
+    <script src="js/ui/gaveta.js" defer></script>
+    <script src="js/ui/provador.js" defer></script>
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <a class="pular" href="#arara">Pular para a arara de looks</a>
+
+    <header class="topo">
+        <nav class="nav conteiner" aria-label="Principal">
+            <a class="marca" href="#inicio" aria-label="FitSearch, voltar ao início">
+                <span class="marca-etiqueta" aria-hidden="true">?</span>
+                <span class="marca-nome">fitsearch</span>
+            </a>
+            <ul class="nav-lista">
+                <li class="so-largo"><a href="#inicio" data-acao="focar-busca">Buscar</a></li>
+                <li><button type="button" class="nav-provador" data-acao="abrir-provador">Provador</button></li>
+                <li class="so-largo"><a href="#estilos">Estilos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="conteudo">
+        <!-- ===================== ABERTURA ===================== -->
+        <section class="abertura" id="inicio" aria-labelledby="titulo-principal">
+            <div class="conteiner abertura-grade">
+                <div class="abertura-texto">
+                    <span class="selo">Provador de estilos</span>
+                    <h1 class="abertura-titulo" id="titulo-principal">
+                        <span class="t-linha">Experimente</span>
+                        <span class="t-linha">estilos até</span>
+                        <span class="t-linha">achar <mark class="marca-texto">o seu.</mark></span>
+                    </h1>
+                    <p class="abertura-sub">Passe a mão pela cortina, busque um look ou entre no provador. No fim, seu estilo sai costurado numa etiqueta.</p>
+
+                    <div class="busca" role="search">
+                        <label class="visualmente-oculto" for="busca-campo">Buscar looks por peça, estilo ou ocasião</label>
+                        <div class="busca-caixa costura">
+                            <svg class="busca-lupa" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/></svg>
+                            <input id="busca-campo" class="busca-campo" type="text" placeholder="O que você quer vestir hoje?" autocomplete="off" spellcheck="false" enterkeyhint="search"
+                                   role="combobox" aria-expanded="false" aria-controls="busca-lista" aria-autocomplete="list">
+                            <kbd class="busca-atalho" aria-hidden="true">/</kbd>
+                            <button class="busca-botao" type="button">Buscar</button>
+                        </div>
+                        <ul class="busca-lista" id="busca-lista" role="listbox" aria-label="Sugestões" hidden></ul>
+                    </div>
+
+                    <div class="abertura-acoes">
+                        <button type="button" class="botao botao-tinta" id="cta-principal" data-acao="abrir-provador">Entrar no provador →</button>
+                        <span class="abertura-dica" id="abertura-dica">se você não sabe o que procurar</span>
+                    </div>
+                </div>
+
+                <div class="abertura-cortina">
+                    <div class="cortina" id="cortina" aria-hidden="true">
+                        <div class="cortina-look"><img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&h=1000&q=70" alt="" width="800" height="1000"></div>
+                        <div class="cortina-varao"></div>
+                        <div class="cortina-tiras"></div>
+                    </div>
+                    <div class="etiqueta-heroi" id="etiqueta-heroi" hidden></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== FAIXA ===================== -->
+        <div class="faixa" role="region" aria-label="Atalhos de estilo">
+            <div class="faixa-fita costura-clara">
+                <div class="faixa-trilho"></div>
+            </div>
+        </div>
+
+        <!-- ===================== ARARA ===================== -->
+        <section class="arara" id="arara" aria-labelledby="arara-titulo" tabindex="-1">
+            <div class="conteiner">
+                <div class="arara-cab">
+                    <div>
+                        <span class="selo">A arara</span>
+                        <h2 class="arara-titulo" id="arara-titulo" aria-live="polite"></h2>
+                    </div>
+                    <div class="para-quem">
+                        <span class="rotulo-mono" id="rotulo-para">Para quem</span>
+                        <div class="segmento" role="group" aria-labelledby="rotulo-para"></div>
+                        <button type="button" class="link-discreto limpar" data-acao="limpar-filtros" hidden>Limpar filtros</button>
+                    </div>
+                </div>
+
+                <div class="chips" role="group" aria-label="Filtrar por estilo"></div>
+                <div class="ocasioes">
+                    <span class="rotulo-mono" id="rotulo-ocasiao">Ocasião</span>
+                    <div class="ocasioes-lista" role="group" aria-labelledby="rotulo-ocasiao"></div>
+                </div>
+
+                <ul class="grade" id="grade"></ul>
+
+                <div class="vazio" id="vazio" hidden>
+                    <span class="vazio-cabide" aria-hidden="true">?</span>
+                    <h3 class="vazio-titulo">Nada na arara com esses filtros</h3>
+                    <p class="vazio-piada"></p>
+                    <div class="vazio-sugestoes"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== ESTILOS DE A A Z ===================== -->
+        <section class="estilos" id="estilos" aria-labelledby="estilos-titulo">
+            <div class="conteiner estilos-grade">
+                <div class="estilos-esq">
+                    <span class="selo" data-revelar>Estilos de A a Z</span>
+                    <h2 class="secao-titulo" id="estilos-titulo" data-revelar>Aprenda a língua da moda</h2>
+                    <p class="secao-sub" data-revelar>Cada estilo explicado numa etiqueta: o que é, as peças-chave e por onde começar.</p>
+                </div>
+                <ul class="estilos-lista"></ul>
+            </div>
+        </section>
+
+        <!-- ===================== COMO FUNCIONA ===================== -->
+        <section class="como" id="como-funciona" aria-labelledby="como-titulo">
+            <div class="conteiner">
+                <span class="selo" data-revelar>Como funciona</span>
+                <h2 class="visualmente-oculto" id="como-titulo">Como funciona</h2>
+                <ol class="como-rotulo costura">
+                    <li class="como-passo">
+                        <span class="como-num">01</span>
+                        <h3>Busque ou entre no provador</h3>
+                        <p>Digite uma peça, um estilo ou uma ocasião, ou deixe que a gente mostre os looks.</p>
+                    </li>
+                    <li class="como-passo">
+                        <span class="como-num">02</span>
+                        <h3>Diga se fica ou não fica</h3>
+                        <p>Você escolhe pelo olho, não pelo nome: os estilos só aparecem no fim.</p>
+                    </li>
+                    <li class="como-passo">
+                        <span class="como-num">03</span>
+                        <h3>Leve sua etiqueta</h3>
+                        <p>Sua composição de estilos fica salva e organiza a arara do seu jeito.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===================== RODAPÉ ===================== -->
+    <footer class="rodape">
+        <div class="conteiner">
+            <p class="rodape-slogan">Moda não vem com manual.<br>Seu estilo vem com <mark class="marca-texto">etiqueta.</mark></p>
+            <div class="rodape-base">
+                <a class="marca marca-clara" href="#inicio" aria-label="FitSearch, voltar ao início">
+                    <span class="marca-etiqueta" aria-hidden="true">?</span>
+                    <span class="marca-nome">fitsearch</span>
+                </a>
+                <nav aria-label="Rodapé">
+                    <ul class="rodape-links">
+                        <li><a href="#inicio" data-acao="focar-busca">Buscar</a></li>
+                        <li><button type="button" data-acao="abrir-provador">Provador</button></li>
+                        <li><a href="#estilos">Estilos</a></li>
+                    </ul>
+                </nav>
+                <p class="rodape-credito">© 2026 FitSearch · fotos: <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">Unsplash</a> · preços são faixas estimadas</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===================== PROVADOR ===================== -->
+    <dialog class="provador" id="provador" aria-labelledby="provador-titulo">
+        <div class="provador-cortina" aria-hidden="true"></div>
+        <div class="provador-topo">
+            <span class="selo">Provador</span>
+            <div class="provador-progresso" hidden>
+                <span class="provador-contagem"></span>
+                <span class="provador-pontos" aria-hidden="true"></span>
+            </div>
+            <button type="button" class="botao botao-contorno provador-sair" data-acao="fechar-provador">✕ Sair</button>
+        </div>
+
+        <!-- passo 0: para quem -->
+        <section class="provador-passo passo-para" data-passo="para">
+            <h2 class="provador-pergunta" id="provador-titulo">Para quem são os looks?</h2>
+            <p class="provador-texto">Isso também filtra a arara depois. Você escolhe pelo olho: os nomes dos estilos só aparecem no fim.</p>
+            <div class="provador-opcoes">
+                <button type="button" class="opcao-para rotulo-entalhe" data-para="todos">Todos</button>
+                <button type="button" class="opcao-para rotulo-entalhe" data-para="feminino">Feminino</button>
+                <button type="button" class="opcao-para rotulo-entalhe" data-para="masculino">Masculino</button>
+            </div>
+        </section>
+
+        <!-- passo 1: looks -->
+        <section class="provador-passo passo-looks" data-passo="looks" hidden>
+            <div class="lado lado-nao"><span class="gigante gigante-nao" aria-hidden="true">NÃO</span></div>
+            <div class="palco"><div class="pilha" aria-live="polite"></div></div>
+            <div class="lado lado-fica"><span class="gigante gigante-fica" aria-hidden="true">FICA</span></div>
+            <div class="provador-aux">
+                <button type="button" class="link-discreto" data-acao="desfazer" disabled>← Desfazer</button>
+                <span class="provador-teclas">ou use as setas ← → do teclado</span>
+            </div>
+            <div class="provador-botoes">
+                <button type="button" class="botao botao-contorno" data-acao="nao">← Não é pra mim</button>
+                <button type="button" class="botao botao-tinta" data-acao="fica">Fica →</button>
+            </div>
+            <div class="provador-etiqueta"></div>
+        </section>
+
+        <!-- passo 2: resultado -->
+        <section class="provador-passo passo-fim" data-passo="fim" hidden>
+            <div class="fim-texto">
+                <span class="selo">Pronto</span>
+                <h2 class="fim-titulo">Seu estilo tem etiqueta.</h2>
+                <p class="fim-frase"></p>
+                <div class="fim-acoes">
+                    <button type="button" class="botao botao-tinta" data-acao="ver-meu-estilo">Ver looks do meu estilo</button>
+                    <button type="button" class="botao botao-contorno" data-acao="refazer">Refazer provador</button>
+                </div>
+            </div>
+            <div class="fim-etiqueta"></div>
+        </section>
+
+        <!-- passo 2b: nada ficou -->
+        <section class="provador-passo passo-vazio" data-passo="vazio" hidden>
+            <span class="vazio-cabide" aria-hidden="true">?</span>
+            <h2 class="provador-pergunta">Nada ficou? Normal, estilo leva tempo.</h2>
+            <p class="provador-texto">Vamos de novo com outros looks. Às vezes o estilo aparece na segunda prova.</p>
+            <button type="button" class="botao botao-tinta" data-acao="nova-rodada">Tentar com outros looks</button>
+        </section>
+    </dialog>
+
+    <!-- ===================== GAVETA ===================== -->
+    <dialog class="gaveta" id="gaveta" aria-labelledby="gaveta-nome">
+        <div class="gaveta-painel">
+            <div class="gaveta-trilho"><button type="button" class="botao botao-contorno gaveta-fechar" data-acao="fechar-gaveta">✕ Fechar</button></div>
+            <div class="gaveta-conteudo"></div>
+        </div>
+    </dialog>
+</body>
+</html>

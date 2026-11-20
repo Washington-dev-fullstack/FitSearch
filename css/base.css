@@ -1,0 +1,98 @@
+/* =========================================================
+   BASE: reset, tipografia, contêiner e primitivas de etiqueta
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--topo-altura) + 12px); -webkit-text-size-adjust: 100%; }
+html.travado { overflow: hidden; }
+
+body {
+    margin: 0;
+    background: var(--algodao);
+    color: var(--tinta);
+    font-family: var(--fonte-texto);
+    font-size: 1rem;
+    line-height: 1.55;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.45; }
+a { color: inherit; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+h1, h2, h3, h4, p { margin: 0; }
+kbd { font-family: var(--fonte-mono); }
+
+h1, h2, h3 { font-family: var(--fonte-titulo); font-weight: 800; letter-spacing: -0.035em; line-height: 0.98; }
+
+:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; border-radius: 2px; }
+.fundo-tinta :focus-visible, .rodape :focus-visible { outline-color: var(--neon); }
+
+.conteiner { width: 100%; max-width: var(--largura); margin-inline: auto; padding-inline: var(--margem); }
+
+.visualmente-oculto {
+    position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.pular {
+    position: absolute; left: 12px; top: -60px; z-index: 100;
+    background: var(--tinta); color: var(--neon); padding: 0.7em 1em; border-radius: var(--raio-p);
+    font-family: var(--fonte-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none;
+}
+.pular:focus { top: 12px; }
+
+/* ---------- primitivas da identidade ---------- */
+.selo {
+    display: inline-block;
+    font-family: var(--fonte-mono); font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    background: var(--tinta); color: var(--neon);
+    padding: 0.45em 0.85em; border-radius: 3px;
+}
+
+.rotulo-mono {
+    font-family: var(--fonte-mono); font-size: 0.72rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--tinta-apagada);
+}
+
+/* costura: pesponto tracejado por dentro */
+.costura { outline: 1.5px dashed var(--ponto); outline-offset: -6px; }
+.costura-clara { outline: 1.5px dashed var(--ponto-claro); outline-offset: -8px; }
+
+/* destaque em forma de etiqueta neon */
+.marca-texto {
+    background: var(--neon); color: var(--tinta);
+    padding: 0 0.16em 0.04em; border-radius: 0.06em;
+    outline: 1.5px dashed var(--ponto); outline-offset: -0.1em;
+    box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
+
+/* ---------- botões ---------- */
+.botao {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+    min-height: 48px; padding: 0.9em 1.4em;
+    font-family: var(--fonte-mono); font-size: 0.8rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+    border: 1.5px solid var(--tinta); border-radius: var(--raio-p);
+    transition: transform 0.2s var(--saida), background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.botao:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 0 -2px var(--tinta); }
+.botao:active:not(:disabled) { transform: translateY(0); box-shadow: none; }
+.botao-tinta { background: var(--tinta); color: var(--neon); }
+.botao-contorno { background: transparent; color: inherit; border-color: currentColor; }
+.botao-claro { background: var(--etiqueta); color: var(--tinta); }
+
+.link-discreto {
+    font-family: var(--fonte-mono); font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase;
+    text-decoration: underline; text-underline-offset: 0.35em; text-decoration-thickness: 1.5px;
+    min-height: 44px; display: inline-flex; align-items: center;
+}
+.link-discreto:hover:not(:disabled) { text-decoration-style: dashed; }
+
+/* seções */
+.secao-titulo { font-size: var(--t-secao); margin-top: 0.9rem; }
+.secao-sub { margin-top: 1rem; color: var(--tinta-suave); font-size: 1.05rem; max-width: 34ch; }

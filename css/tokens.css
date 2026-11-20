@@ -1,0 +1,46 @@
+/* =========================================================
+   TOKENS: a identidade "Etiquetas" em variáveis
+   ========================================================= */
+:root {
+    /* Cores (contraste conferido: ver spec) */
+    --algodao: #E9E5DC;          /* fundo da página */
+    --etiqueta: #F8F5EE;         /* superfícies, cartões, gaveta */
+    --campo: #FBFAF6;            /* campo de busca */
+    --tinta: #141414;            /* texto principal · 14,7:1 no algodão */
+    --tinta-suave: #4A4741;      /* texto secundário · 7,4:1 */
+    --tinta-apagada: #635F57;    /* legendas · 5,0:1 no algodão, 5,8:1 na etiqueta */
+    --linho: #BDB6A8;            /* variante de tira (só texto tinta) */
+    --creme: #EDE9E0;            /* texto sobre etiqueta preta · 15,2:1 */
+    --neon: #D7FF3B;             /* o único destaque: nunca texto sobre fundo claro */
+
+    --linha: rgba(20, 20, 20, 0.12);
+    --linha-forte: rgba(20, 20, 20, 0.32);
+    --ponto: rgba(20, 20, 20, 0.3);         /* costura sobre claro */
+    --ponto-claro: rgba(237, 233, 224, 0.4); /* costura sobre tinta */
+
+    /* Tipografia */
+    --fonte-titulo: 'Syne', 'Geist', system-ui, sans-serif;
+    --fonte-texto: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --fonte-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    --t-titulo: clamp(2.05rem, 0.9rem + 3.6vw, 3.7rem);
+    --t-secao: clamp(2rem, 1.3rem + 2.6vw, 3.4rem);
+    --t-slogan: clamp(1.8rem, 0.7rem + 3vw, 3.3rem);
+
+    /* Formas */
+    --raio-p: 4px;
+    --raio-m: 8px;
+    --raio-g: 14px;
+    --entalhe: polygon(0 0, 100% 0, calc(100% - 0.7em) 50%, 100% 100%, 0 100%);
+    --sombra-etiqueta: 0 18px 34px -18px rgba(40, 30, 20, 0.45), 0 2px 6px rgba(40, 30, 20, 0.08);
+    --sombra-alta: 0 30px 60px -28px rgba(40, 30, 20, 0.5), 0 4px 10px rgba(40, 30, 20, 0.1);
+
+    /* Espaço */
+    --margem: clamp(16px, 4vw, 48px);
+    --largura: 1280px;
+    --secao: clamp(72px, 10vw, 140px);
+    --topo-altura: 68px;
+
+    /* Movimento */
+    --saida: cubic-bezier(0.22, 1, 0.36, 1);
+    --mola: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
